@@ -11,11 +11,19 @@ dotenv.config({ path: "./config/config.env" });
 // Connect to Database
 connectDB();
 
+// Require Routes
+const user = require("./routes/user");
+const classes = require("./routes/user");
+
 // Initializing App
 const app = express();
 
 // Cross Origin Domain
 app.use(cors());
+
+// Use Routes
+app.use("/api/user", user);
+app.use("/api/class", classes);
 
 // Listening to The PORT
 const PORT = process.env.PORT || 3000;

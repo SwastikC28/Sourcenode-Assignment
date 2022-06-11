@@ -7,7 +7,10 @@ const User = require("../models/User");
 // @desc    Get all users
 // @route   GET /api/v1/auth/users
 // @access  Private/Admin
-exports.getUsers = asyncHandler(async (req, res, next) => {});
+exports.getUsers = asyncHandler(async (req, res, next) => {
+  const user = await User.find();
+  res.status(200).json({ success: true, data: user });
+});
 
 // @desc    Get single user
 // @route   GET /api/v1/auth/users/:id
