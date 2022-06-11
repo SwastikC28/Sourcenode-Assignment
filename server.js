@@ -4,6 +4,7 @@ const colors = require("colors");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const errorResponse = require("./middlewares/error");
 
 // Load Environment Variables
 dotenv.config({ path: "./config/config.env" });
@@ -20,6 +21,10 @@ const app = express();
 
 // Cross Origin Domain
 app.use(cors());
+
+// Use Middlewares
+app.use(errorResponse);
+app.use(express.json());
 
 // Use Routes
 app.use("/api/user", user);
