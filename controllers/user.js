@@ -20,12 +20,32 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: user });
 });
 
+exports.getAllTeachers = asyncHandler(async (req, res, next) => {
+  const user = await User.find({ role: "teacher" });
+  res.status(200).json({ success: true, data: user });
+});
+
+exports.getAllStudents = asyncHandler(async (req, res, next) => {
+  const user = await User.find({ role: "student" });
+  res.status(200).json({ success: true, data: user });
+});
+
 // @desc    Create user
 // @route   POST /api/v1/auth/users
 // @access  Private/Admin
 exports.createUser = asyncHandler(async (req, res, next) => {
   const user = await User.create(req.body);
-  res.status(201).json({ success: true, data: user });
+  let message;
+  const { _id, role } = user;
+
+  if (role === "teacher") {
+    message = "Teacher Added Successfully";
+  } else if (role === "admin") {
+    message = "Admin Added Successfully";
+  } else if (role === "user") {
+    message = "User Added Successfully";
+  }
+  res.status(201).json({ success: true, _id, message });
 });
 
 // @desc    Update user
@@ -43,6 +63,23 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v1/auth/users/:id
 // @access  Private/Admin
 exports.deleteUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorResponse(`User not Found`, 404));
+  }
+
+  const { _id, role } = user;
+
+  if (role === "teacher") {
+    message = "Teacher Deleted Successfully";
+  } else if (role === "admin") {
+    message = "Admin Deleted Successfully";
+  } else if (role === "user") {
+    message = "User Deleted Successfully";
+  }
+
   await User.findByIdAndDelete(req.params.id);
-  res.status(200).json({ success: true, data: {} });
+
+  res.status(200).json({ success: true, _id, message });
 });

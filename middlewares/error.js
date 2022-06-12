@@ -4,8 +4,7 @@ const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
 
-  // Log only if in Development Mode
-  if (process.env.NODE_ENV === "development") console.log(err);
+  console.log(err);
 
   //Mongoose Bad ObjectId
   if (err.name === "CastError") {

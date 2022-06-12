@@ -1,5 +1,5 @@
-const asyncHandler = require("../middlewares/async");
-const errorHandler = require("../utils/errorHandler");
+const asyncHandler = require("express-async-handler");
+const errorHandler = require("../utils/errorResponse");
 const User = require("../models/User");
 
 exports.register = asyncHandler(async (req, res, next) => {
@@ -14,9 +14,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 exports.login = asyncHandler(async (req, res, next) => {
   let { email, password } = req.body;
 
-  const user = await User.findOne({ email })
-    .select("+password")
-    .populate("blogs");
+  const user = await User.findOne({ email }).select("+password");
 
   if (!email || !password) {
     return next(new errorHandler(`Please provide an email and password`, 401));
@@ -45,6 +43,8 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 
 // Get Token from model,create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
+  const { _id, name, role, email } = user;
+
   // Create token
   const token = user.getSignedJwtToken();
 
@@ -62,6 +62,9 @@ const sendTokenResponse = (user, statusCode, res) => {
   res.status(statusCode).cookie("token", token, options).json({
     success: true,
     token,
-    user,
+    _id,
+    name,
+    role,
+    email,
   });
 };
