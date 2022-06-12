@@ -17,6 +17,7 @@ connectDB();
 const user = require("./routes/user");
 const classes = require("./routes/class");
 const auth = require("./routes/auth");
+const student = require("./routes/student");
 
 // Initializing App
 const app = express();
@@ -33,6 +34,7 @@ app.use(express.json());
 app.use("/api/auth", auth);
 app.use("/api/user", user);
 app.use("/api/class", classes);
+app.use("/api/student", student);
 
 // Custom Error Handling Middleware
 app.use(errorResponse);

@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 
 const ScoreCardSchema = mongoose.Schema({
+  studentid: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Student",
+    required: true,
+  },
+
   name: {
     type: String,
     required: [true, "Please provide Subject Name."],
